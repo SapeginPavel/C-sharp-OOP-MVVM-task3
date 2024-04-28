@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using Microsoft.Win32;
 
@@ -6,16 +7,30 @@ namespace Task3_1.ViewModel;
 
 class ViewModelClass : INotifyPropertyChanged
 {
-    private string? pathToClassLibrary;
+    private string? _pathToAssembly;
+    private Assembly? _assemblyLoaded;
+    
 
-    public string? PathToClassLibrary
+    public string? PathToAssembly
     {
-        get => pathToClassLibrary;
+        get => _pathToAssembly;
         set
         {
-            if (value == pathToClassLibrary) return;
-            pathToClassLibrary = value;
-            OnPropertyChanged(nameof(PathToClassLibrary)); //todo: мб не нужно
+            if (value == _pathToAssembly) return;
+            _pathToAssembly = value;
+            UpdateAssemblyLoaded();
+            // OnPropertyChanged(nameof(PathToAssembly)); //todo: мб не нужно
+        }
+    }
+
+    public Assembly? AssemblyLoaded
+    {
+        get => _assemblyLoaded;
+        set
+        {
+            if (Equals(value, _assemblyLoaded)) return;
+            _assemblyLoaded = value;
+            // OnPropertyChanged();
         }
     }
 
@@ -36,9 +51,6 @@ class ViewModelClass : INotifyPropertyChanged
     
     
     
-    
-    
-    
     private CommandClass openFileCommand;
     public CommandClass OpenFileCommand
     {
@@ -51,11 +63,6 @@ class ViewModelClass : INotifyPropertyChanged
                     OpenFileDialogAction(o);
                 });
             }
-            // return openFileCommand ??
-            //        (openFileCommand = new CommandClass(obj =>
-            //        {
-            //            Console.WriteLine("rkgnr");
-            //        }));
             return openFileCommand;
         }
     }
@@ -65,10 +72,15 @@ class ViewModelClass : INotifyPropertyChanged
         OpenFileDialog openFileDialog = new OpenFileDialog();
         if (openFileDialog.ShowDialog() == true)
         {
-            // Код для обработки выбранного файла
             string selectedFilePath = openFileDialog.FileName;
-            // Здесь вы можете выполнить необходимые действия с выбранным файлом
+            PathToAssembly = selectedFilePath;
+            
         }
+    }
+
+    private void UpdateAssemblyLoaded()
+    {
+        AssemblyLoaded = Assembly.LoadFrom(_pathToAssembly);
     }
     
 }
