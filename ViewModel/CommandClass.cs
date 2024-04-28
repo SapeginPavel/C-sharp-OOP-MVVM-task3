@@ -18,7 +18,6 @@ namespace Task3_1.ViewModel
             remove { CommandManager.RequerySuggested -= value; }
         }
 
-        //делегаты - указатели на методы
         public CommandClass(Action<object> execute, Func<object, bool> canExecute = null) // =null - это необязательный параметр (будет null)
         {
             this.execute = execute;
