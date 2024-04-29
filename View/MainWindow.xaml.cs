@@ -8,6 +8,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Task3_1.Model;
 using Task3_1.ViewModel;
 
 namespace Task3_1.View;
@@ -17,7 +18,7 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
-        ViewModelClass vmc = new ViewModelClass();
+        ViewModelClass vmc = new ViewModelClass(new ModelClass());
         DataContext = vmc;
     }
 }

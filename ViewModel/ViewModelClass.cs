@@ -1,38 +1,58 @@
 ﻿using System.ComponentModel;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Windows;
 using Microsoft.Win32;
+using Task3_1.Model;
 
 namespace Task3_1.ViewModel;
 
 class ViewModelClass : INotifyPropertyChanged
 {
-    private string? _pathToAssembly;
-    private Assembly? _assemblyLoaded;
-    
+    // private string? _pathToAssembly;
+    // private Assembly? _assemblyLoaded;
 
-    public string? PathToAssembly
+    private ModelClass _modelClass;
+
+    public ViewModelClass(ModelClass modelClass)
     {
-        get => _pathToAssembly;
-        set
+        _modelClass = modelClass;
+        modelClass.PropertyChanged += (sender, e) =>
         {
-            if (value == _pathToAssembly) return;
-            _pathToAssembly = value;
-            UpdateAssemblyLoaded();
-            // OnPropertyChanged(nameof(PathToAssembly)); //todo: мб не нужно
-        }
+            if (e.PropertyName == nameof(modelClass.PathToAssembly))
+            {
+                
+            } else if (e.PropertyName == nameof(modelClass.AssemblyLoaded))
+            {
+                MessageBox.Show("Работает");
+            }
+        };
     }
 
-    public Assembly? AssemblyLoaded
-    {
-        get => _assemblyLoaded;
-        set
-        {
-            if (Equals(value, _assemblyLoaded)) return;
-            _assemblyLoaded = value;
-            // OnPropertyChanged();
-        }
-    }
+
+    // public string? PathToAssembly
+    // {
+    //     get => _pathToAssembly;
+    //     set
+    //     {
+    //         if (value == _pathToAssembly) return;
+    //         _pathToAssembly = value;
+    //         // UpdateAssemblyLoaded();
+    //         // OnPropertyChanged(nameof(PathToAssembly)); //todo: мб не нужно
+    //     }
+    // }
+    //
+    // public Assembly? AssemblyLoaded
+    // {
+    //     get => _assemblyLoaded;
+    //     set
+    //     {
+    //         if (Equals(value, _assemblyLoaded)) return;
+    //         _assemblyLoaded = value;
+    //         MessageBox.Show(_pathToAssembly);
+    //         // OnPropertyChanged();
+    //     }
+    // }
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -40,16 +60,6 @@ class ViewModelClass : INotifyPropertyChanged
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
-
-    protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
-    {
-        if (EqualityComparer<T>.Default.Equals(field, value)) return false;
-        field = value;
-        OnPropertyChanged(propertyName);
-        return true;
-    }
-    
-    
     
     private CommandClass openFileCommand;
     public CommandClass OpenFileCommand
@@ -73,14 +83,11 @@ class ViewModelClass : INotifyPropertyChanged
         if (openFileDialog.ShowDialog() == true)
         {
             string selectedFilePath = openFileDialog.FileName;
-            PathToAssembly = selectedFilePath;
+            _modelClass.PathToAssembly = selectedFilePath;
             
         }
     }
 
-    private void UpdateAssemblyLoaded()
-    {
-        AssemblyLoaded = Assembly.LoadFrom(_pathToAssembly);
-    }
+    
     
 }
