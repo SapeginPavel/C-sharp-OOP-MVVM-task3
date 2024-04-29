@@ -17,8 +17,6 @@ public class ModelClass : INotifyPropertyChanged
     
     private List<Type> _params;
 
-
-
     public ModelClass()
     {
         _classes = new List<Type>();
@@ -72,6 +70,17 @@ public class ModelClass : INotifyPropertyChanged
         }
     }
 
+    public List<Type> Params
+    {
+        get => _params;
+        set
+        {
+            if (Equals(value, _params)) return;
+            _params = value ?? throw new ArgumentNullException(nameof(value));
+            OnPropertyChanged(nameof(Params));
+        }
+    }
+
     public Type? SelectedClass
     {
         get => _selectedClass;
@@ -102,6 +111,7 @@ public class ModelClass : INotifyPropertyChanged
 
     private void ReadClassesFromAssemblyLoaded()
     {
+        Classes.Clear();
         Type[] classesTemp = AssemblyLoaded.GetTypes();
         foreach (var c in classesTemp)
         {
@@ -117,12 +127,13 @@ public class ModelClass : INotifyPropertyChanged
     private void ReadMethodsFromAssemblyLoaded()
     {
         MethodInfo[] methodsTemp = SelectedClass.GetMethods();
+        Methods.Clear();
         foreach (var m in methodsTemp)
         {
-            if (m.IsConstructor || m.IsAbstract)
-            {
-                continue;
-            }
+            // if (m.IsConstructor || m.IsAbstract)
+            // {
+            //     continue;
+            // }
 
             Methods.Add(m);
         }
@@ -131,6 +142,7 @@ public class ModelClass : INotifyPropertyChanged
 
     private void ReadMethodParamsFromAssemblyLoaded()
     {
+        
         SelectedMethod.GetParameters();
     }
     

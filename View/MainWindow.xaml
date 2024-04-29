@@ -9,14 +9,16 @@
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
-        
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         
+        <!-- Классы -->
         <ListBox Grid.Column="0" Grid.Row="0" ItemsSource="{Binding Classes}"
                  SelectedItem="{Binding SelectedClass}">
             <ListBox.ItemTemplate>
@@ -30,6 +32,7 @@
         
         <Button Grid.Column="0" Grid.Row="1" Command="{Binding OpenFileCommand}" Content="Открыть .dll файл" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5"/>
 
+        <!-- Конструкторы -->
         <ListBox Grid.Column="1" Grid.Row="0" ItemsSource="{Binding Methods}"
                  SelectedItem="{Binding SelectedMethod}">
             <ListBox.ItemTemplate>
@@ -41,14 +44,65 @@
             </ListBox.ItemTemplate>
         </ListBox>
         
-        <Grid Grid.Row="1" Grid.Column="1" Margin="10">
+        <ListBox Grid.Column="1" Grid.Row="1" ItemsSource="{Binding Methods}"
+                 SelectedItem="{Binding SelectedMethod}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Margin="5">
+                        <TextBlock FontSize="18" Text="{Binding Path=Name}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        
+        <Grid Grid.Row="2" Grid.Column="1" Margin="10">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
-            <Button Grid.Column="0" Grid.Row="1" Content="Выполнить" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5"/>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            
+            <TextBox Grid.Column="0" Grid.Row="0" Margin="5"></TextBox>
+            <Button Grid.Column="1" Grid.Row="0" Content="Создать" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5"/>
         </Grid>
         
+        <!-- Методы -->
+        <ListBox Grid.Column="2" Grid.Row="0" ItemsSource="{Binding Methods}"
+                 SelectedItem="{Binding SelectedMethod}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Margin="5">
+                        <TextBlock FontSize="18" Text="{Binding Path=Name}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        
+        <ListBox Grid.Column="2" Grid.Row="1" ItemsSource="{Binding Methods}"
+                 SelectedItem="{Binding SelectedMethod}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Margin="5">
+                        <TextBlock FontSize="18" Text="{Binding Path=Name}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        
+        <Grid Grid.Row="2" Grid.Column="2" Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            
+            <TextBox Grid.Column="0" Grid.Row="0" Margin="5"></TextBox>
+            <Button Grid.Column="1" Grid.Row="0" Content="Выполнить" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5"/>
+        </Grid>
 
     </Grid>
 </Window>
