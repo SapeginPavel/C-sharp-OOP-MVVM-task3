@@ -11,18 +11,23 @@ namespace Task3_1.ViewModel;
 class ViewModelClass : INotifyPropertyChanged
 {
     private ObservableCollection<Type> _classes; //todo: упростить (сразу свойства сделать)
+    private Type? _selectedClass;
+
     private ObservableCollection<MethodInfo> _methods;
+    private MethodInfo? _selectedMethod;
+    
+    private ObservableCollection<ConstructorInfo> _constructors;
+    private ConstructorInfo? _selectedConstructor;
 
     private ModelClass _modelClass;
 
-    private Type? _selectedClass;
-    private MethodInfo? _selectedMethod;
 
     public ViewModelClass(ModelClass modelClass)
     {
         _modelClass = modelClass;
         Classes = new ObservableCollection<Type>();
         Methods = new ObservableCollection<MethodInfo>();
+        Constructors = new ObservableCollection<ConstructorInfo>();
         modelClass.PropertyChanged += (sender, e) =>
         {
             if (e.PropertyName == nameof(modelClass.Classes))
@@ -38,6 +43,13 @@ class ViewModelClass : INotifyPropertyChanged
                 foreach (MethodInfo methodInfo in modelClass.Methods)
                 {
                     Methods.Add(methodInfo);
+                }
+            } else if (e.PropertyName == nameof(modelClass.Constructors))
+            {
+                Constructors.Clear();
+                foreach (ConstructorInfo constructorInfo in modelClass.Constructors)
+                {
+                    Constructors.Add(constructorInfo);
                 }
             }
         };
@@ -58,6 +70,12 @@ class ViewModelClass : INotifyPropertyChanged
         set => _methods = value ?? throw new ArgumentNullException(nameof(value));
     }
 
+    public ObservableCollection<ConstructorInfo> Constructors
+    {
+        get => _constructors;
+        set => _constructors = value ?? throw new ArgumentNullException(nameof(value));
+    }
+
     public Type? SelectedClass
     {
         get => _selectedClass;
@@ -75,6 +93,16 @@ class ViewModelClass : INotifyPropertyChanged
         {
             _modelClass.SelectedMethod = value;
             _selectedMethod = value;
+        }
+    }
+
+    public ConstructorInfo? SelectedConstructor
+    {
+        get => _selectedConstructor;
+        set
+        {
+            _modelClass.SelectedConstructor = value;
+            _selectedConstructor = value;
         }
     }
 

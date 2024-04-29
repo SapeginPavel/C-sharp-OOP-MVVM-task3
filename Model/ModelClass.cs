@@ -15,13 +15,19 @@ public class ModelClass : INotifyPropertyChanged
     private List<MethodInfo> _methods;
     private MethodInfo? _selectedMethod;
     
-    private List<Type> _params;
+    public List<ConstructorInfo> Constructors { get; }
+    private ConstructorInfo? _selectedConstructor;
+    
+    private List<Type> _paramsMethod;
+    private List<Type> _paramsConctructor;
 
     public ModelClass()
     {
         _classes = new List<Type>();
         _methods = new List<MethodInfo>();
-        _params = new List<Type>();
+        Constructors = new List<ConstructorInfo>();
+        _paramsMethod = new List<Type>();
+        _paramsConctructor = new List<Type>();
     }
 
     public string? PathToAssembly
@@ -70,17 +76,6 @@ public class ModelClass : INotifyPropertyChanged
         }
     }
 
-    public List<Type> Params
-    {
-        get => _params;
-        set
-        {
-            if (Equals(value, _params)) return;
-            _params = value ?? throw new ArgumentNullException(nameof(value));
-            OnPropertyChanged(nameof(Params));
-        }
-    }
-
     public Type? SelectedClass
     {
         get => _selectedClass;
@@ -89,7 +84,8 @@ public class ModelClass : INotifyPropertyChanged
             if (Equals(value, _selectedClass)) return;
             _selectedClass = value;
             ReadMethodsFromAssemblyLoaded();
-            OnPropertyChanged(nameof(SelectedClass));
+            ReadConstructorsFromAssemblyLoaded();
+            // OnPropertyChanged(nameof(SelectedClass));
         }
     }
 
@@ -101,6 +97,16 @@ public class ModelClass : INotifyPropertyChanged
             if (Equals(value, _selectedMethod)) return;
             _selectedMethod = value;
             OnPropertyChanged(nameof(SelectedMethod));
+        }
+    }
+
+    public ConstructorInfo? SelectedConstructor
+    {
+        get => _selectedConstructor;
+        set
+        {
+            if (Equals(value, _selectedConstructor)) return;
+            _selectedConstructor = value;
         }
     }
 
@@ -130,19 +136,28 @@ public class ModelClass : INotifyPropertyChanged
         Methods.Clear();
         foreach (var m in methodsTemp)
         {
-            // if (m.IsConstructor || m.IsAbstract)
-            // {
-            //     continue;
-            // }
-
+            if (m.IsConstructor || m.IsAbstract)
+            {
+                continue;
+            }
             Methods.Add(m);
         }
         OnPropertyChanged(nameof(Methods));
     }
+    
+    private void ReadConstructorsFromAssemblyLoaded()
+    {
+        ConstructorInfo[] constructorsTemp = SelectedClass.GetConstructors();
+        Constructors.Clear();
+        foreach (var c in constructorsTemp)
+        {
+            Constructors.Add(c);
+        }
+        OnPropertyChanged(nameof(Constructors));
+    }
 
     private void ReadMethodParamsFromAssemblyLoaded()
     {
-        
         SelectedMethod.GetParameters();
     }
     

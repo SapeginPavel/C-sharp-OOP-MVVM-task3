@@ -33,8 +33,8 @@
         <Button Grid.Column="0" Grid.Row="1" Command="{Binding OpenFileCommand}" Content="Открыть .dll файл" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5"/>
 
         <!-- Конструкторы -->
-        <ListBox Grid.Column="1" Grid.Row="0" ItemsSource="{Binding Methods}"
-                 SelectedItem="{Binding SelectedMethod}">
+        <ListBox Grid.Column="1" Grid.Row="0" ItemsSource="{Binding Constructors}"
+                 SelectedItem="{Binding SelectedConstructor}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Margin="5">
