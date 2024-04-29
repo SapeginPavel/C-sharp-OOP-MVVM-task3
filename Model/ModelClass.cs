@@ -8,7 +8,9 @@ public class ModelClass : INotifyPropertyChanged
 {
     private string? _pathToAssembly;
     private Assembly? _assemblyLoaded;
+    private Type? _selectedClass;
     private List<Type> _classes;
+
 
     public ModelClass()
     {
@@ -44,18 +46,26 @@ public class ModelClass : INotifyPropertyChanged
         get => _classes;
         set
         {
-            if (_classes == value)
-            {
-                return;
-            }
+            if (Equals(value, _classes)) return;
             _classes = value;
-            OnPropertyChanged(nameof(_classes));
+            OnPropertyChanged(nameof(Classes));
+        }
+    }
+
+    public Type? SelectedClass
+    {
+        get => _selectedClass;
+        set
+        {
+            if (Equals(value, _selectedClass)) return;
+            _selectedClass = value;
+            OnPropertyChanged(nameof(SelectedClass));
         }
     }
 
     private void UpdateAssemblyLoaded()
     {
-        AssemblyLoaded = Assembly.LoadFrom(_pathToAssembly);
+        AssemblyLoaded = Assembly.LoadFrom(PathToAssembly);
     }
 
     private void ReadClassesFromAssemblyLoaded()

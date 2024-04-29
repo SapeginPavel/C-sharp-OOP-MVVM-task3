@@ -14,6 +14,8 @@ class ViewModelClass : INotifyPropertyChanged
 
     private ModelClass _modelClass;
 
+    private Type? _selectedClass;
+
     public ViewModelClass(ModelClass modelClass)
     {
         _modelClass = modelClass;
@@ -31,8 +33,10 @@ class ViewModelClass : INotifyPropertyChanged
                     }
                     Classes.Add(t);
                 }
-                
-            } else if (e.PropertyName == nameof(modelClass.AssemblyLoaded))
+
+                Console.WriteLine("Почему");
+                Console.WriteLine(Classes[0]);
+            } else if (e.PropertyName == nameof(modelClass.SelectedClass))
             {
                 
             }
@@ -44,12 +48,17 @@ class ViewModelClass : INotifyPropertyChanged
         get => _classes;
         set
         {
-            if (Classes == value)
-            {
-                return;
-            }
-
             _classes = value;
+        }
+    }
+
+    public Type? SelectedClass
+    {
+        get => _selectedClass;
+        set
+        {
+            _modelClass.SelectedClass = value;
+            _selectedClass = value;
         }
     }
 
