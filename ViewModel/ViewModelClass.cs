@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Windows;
@@ -9,6 +10,7 @@ namespace Task3_1.ViewModel;
 
 class ViewModelClass : INotifyPropertyChanged
 {
+    private ObservableCollection<Type> _classes;
     // private string? _pathToAssembly;
     // private Assembly? _assemblyLoaded;
 
@@ -19,40 +21,31 @@ class ViewModelClass : INotifyPropertyChanged
         _modelClass = modelClass;
         modelClass.PropertyChanged += (sender, e) =>
         {
-            if (e.PropertyName == nameof(modelClass.PathToAssembly))
+            if (e.PropertyName == nameof(modelClass.Classes))
             {
+                Classes.Clear();
+                foreach (Type t in modelClass.Classes)
+                {
+                    if (t.IsAbstract)
+                    {
+                        continue;
+                    }
+                    Classes.Add(t);
+                }
                 
             } else if (e.PropertyName == nameof(modelClass.AssemblyLoaded))
             {
-                MessageBox.Show("Работает");
+                
             }
         };
     }
 
+    public ObservableCollection<Type> Classes
+    {
+        get => _classes;
+        set => _classes = value ?? throw new ArgumentNullException(nameof(value));
+    }
 
-    // public string? PathToAssembly
-    // {
-    //     get => _pathToAssembly;
-    //     set
-    //     {
-    //         if (value == _pathToAssembly) return;
-    //         _pathToAssembly = value;
-    //         // UpdateAssemblyLoaded();
-    //         // OnPropertyChanged(nameof(PathToAssembly)); //todo: мб не нужно
-    //     }
-    // }
-    //
-    // public Assembly? AssemblyLoaded
-    // {
-    //     get => _assemblyLoaded;
-    //     set
-    //     {
-    //         if (Equals(value, _assemblyLoaded)) return;
-    //         _assemblyLoaded = value;
-    //         MessageBox.Show(_pathToAssembly);
-    //         // OnPropertyChanged();
-    //     }
-    // }
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
