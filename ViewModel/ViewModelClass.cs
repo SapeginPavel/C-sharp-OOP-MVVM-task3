@@ -11,14 +11,13 @@ namespace Task3_1.ViewModel;
 class ViewModelClass : INotifyPropertyChanged
 {
     private ObservableCollection<Type> _classes;
-    // private string? _pathToAssembly;
-    // private Assembly? _assemblyLoaded;
 
     private ModelClass _modelClass;
 
     public ViewModelClass(ModelClass modelClass)
     {
         _modelClass = modelClass;
+        Classes = new ObservableCollection<Type>();
         modelClass.PropertyChanged += (sender, e) =>
         {
             if (e.PropertyName == nameof(modelClass.Classes))
@@ -43,7 +42,15 @@ class ViewModelClass : INotifyPropertyChanged
     public ObservableCollection<Type> Classes
     {
         get => _classes;
-        set => _classes = value ?? throw new ArgumentNullException(nameof(value));
+        set
+        {
+            if (Classes == value)
+            {
+                return;
+            }
+
+            _classes = value;
+        }
     }
 
 
@@ -73,6 +80,7 @@ class ViewModelClass : INotifyPropertyChanged
     private void OpenFileDialogAction(object parameter)
     {
         OpenFileDialog openFileDialog = new OpenFileDialog();
+        openFileDialog.Filter = "Только dll (*.dll)|*.dll";
         if (openFileDialog.ShowDialog() == true)
         {
             string selectedFilePath = openFileDialog.FileName;
@@ -80,7 +88,4 @@ class ViewModelClass : INotifyPropertyChanged
             
         }
     }
-
-    
-    
 }
