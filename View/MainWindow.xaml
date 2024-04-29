@@ -8,8 +8,8 @@
         Title="MainWindow" Height="450" Width="800">
     <Grid Margin="10">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
         
         <Grid.ColumnDefinitions>
@@ -17,9 +17,7 @@
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         
-        <Button Command="{Binding OpenFileCommand}" Content="Открыть .dll файл" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5"/>
-        
-        <ListBox Grid.Column="0" Grid.Row="1" ItemsSource="{Binding Classes}"
+        <ListBox Grid.Column="0" Grid.Row="0" ItemsSource="{Binding Classes}"
                  SelectedItem="{Binding SelectedClass}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
@@ -30,5 +28,27 @@
             </ListBox.ItemTemplate>
         </ListBox>
         
+        <Button Grid.Column="0" Grid.Row="1" Command="{Binding OpenFileCommand}" Content="Открыть .dll файл" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5"/>
+
+        <ListBox Grid.Column="1" Grid.Row="0" ItemsSource="{Binding Methods}"
+                 SelectedItem="{Binding SelectedMethod}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Margin="5">
+                        <TextBlock FontSize="18" Text="{Binding Path=Name}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        
+        <Grid Grid.Row="1" Grid.Column="1" Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Button Grid.Column="0" Grid.Row="1" Content="Выполнить" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5"/>
+        </Grid>
+        
+
     </Grid>
 </Window>

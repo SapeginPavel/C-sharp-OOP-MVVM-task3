@@ -25,6 +25,7 @@ internal class Airplane : AirCraft
         {
             if ((CurrentHeightAboveGround == 0 || CurrentHeightAboveGround - stepForHeight <= 0) && CurrentRunwayLength < requiredRunwayLength)
             {
+                Console.WriteLine("Нельзя выполнить полёт вниз для самолёта. Текущая высота: " + CurrentHeightAboveGround);
                 return false;
             }
             else
@@ -40,7 +41,8 @@ internal class Airplane : AirCraft
                         CurrentHeightAboveGround = 0;
                     }
                 }
-                return true; //тут можно было бы сделать вероятность не 100%
+                Console.WriteLine("Выполнен полёт вниз для самолёта. Текущая высота: " + CurrentHeightAboveGround);
+                return true;
             }
         }
 
@@ -48,6 +50,7 @@ internal class Airplane : AirCraft
         {
             if (CurrentHeightAboveGround == 0 && CurrentRunwayLength < requiredRunwayLength)
             {
+                Console.WriteLine("Нельзя выполнить полёт вверх для самолёта. Текущая высота: " + CurrentHeightAboveGround);
                 return false;
             }
             else
@@ -62,6 +65,7 @@ internal class Airplane : AirCraft
                         CurrentHeightAboveGround += stepForHeight;
                     }
                 }
+                Console.WriteLine("Выполнен полёт вверх для самолёта. Текущая высота: " + CurrentHeightAboveGround);
                 return true;
             }
         }

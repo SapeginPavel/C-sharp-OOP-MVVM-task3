@@ -22,10 +22,7 @@ internal abstract class AirCraft : INotifyPropertyChanged
 
     public int CurrentHeightAboveGround 
     { 
-        get 
-        { 
-            return currentHeightAboveGround; 
-        } 
+        get => currentHeightAboveGround;
         set 
         { 
             currentHeightAboveGround = value;

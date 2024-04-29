@@ -10,16 +10,19 @@ namespace Task3_1.ViewModel;
 
 class ViewModelClass : INotifyPropertyChanged
 {
-    private ObservableCollection<Type> _classes;
+    private ObservableCollection<Type> _classes; //todo: упростить (сразу свойства сделать)
+    private ObservableCollection<MethodInfo> _methods;
 
     private ModelClass _modelClass;
 
     private Type? _selectedClass;
+    private MethodInfo? _selectedMethod;
 
     public ViewModelClass(ModelClass modelClass)
     {
         _modelClass = modelClass;
         Classes = new ObservableCollection<Type>();
+        Methods = new ObservableCollection<MethodInfo>();
         modelClass.PropertyChanged += (sender, e) =>
         {
             if (e.PropertyName == nameof(modelClass.Classes))
@@ -27,18 +30,15 @@ class ViewModelClass : INotifyPropertyChanged
                 Classes.Clear();
                 foreach (Type t in modelClass.Classes)
                 {
-                    if (t.IsAbstract)
-                    {
-                        continue;
-                    }
                     Classes.Add(t);
                 }
-
-                Console.WriteLine("Почему");
-                Console.WriteLine(Classes[0]);
-            } else if (e.PropertyName == nameof(modelClass.SelectedClass))
+            } else if (e.PropertyName == nameof(modelClass.Methods))
             {
-                
+                Methods.Clear();
+                foreach (MethodInfo methodInfo in modelClass.Methods)
+                {
+                    Methods.Add(methodInfo);
+                }
             }
         };
     }
@@ -52,6 +52,12 @@ class ViewModelClass : INotifyPropertyChanged
         }
     }
 
+    public ObservableCollection<MethodInfo> Methods
+    {
+        get => _methods;
+        set => _methods = value ?? throw new ArgumentNullException(nameof(value));
+    }
+
     public Type? SelectedClass
     {
         get => _selectedClass;
@@ -59,6 +65,16 @@ class ViewModelClass : INotifyPropertyChanged
         {
             _modelClass.SelectedClass = value;
             _selectedClass = value;
+        }
+    }
+
+    public MethodInfo? SelectedMethod
+    {
+        get => _selectedMethod;
+        set
+        {
+            _modelClass.SelectedMethod = value;
+            _selectedMethod = value;
         }
     }
 

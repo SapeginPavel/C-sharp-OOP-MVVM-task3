@@ -8,13 +8,22 @@ public class ModelClass : INotifyPropertyChanged
 {
     private string? _pathToAssembly;
     private Assembly? _assemblyLoaded;
-    private Type? _selectedClass;
+
     private List<Type> _classes;
+    private Type? _selectedClass;
+
+    private List<MethodInfo> _methods;
+    private MethodInfo? _selectedMethod;
+    
+    private List<Type> _params;
+
 
 
     public ModelClass()
     {
-        _classes = null;
+        _classes = new List<Type>();
+        _methods = new List<MethodInfo>();
+        _params = new List<Type>();
     }
 
     public string? PathToAssembly
@@ -52,6 +61,17 @@ public class ModelClass : INotifyPropertyChanged
         }
     }
 
+    public List<MethodInfo> Methods
+    {
+        get => _methods;
+        set
+        {
+            if (Equals(value, _methods)) return;
+            _methods = value ?? throw new ArgumentNullException(nameof(value));
+            OnPropertyChanged(nameof(Methods));
+        }
+    }
+
     public Type? SelectedClass
     {
         get => _selectedClass;
@@ -59,7 +79,19 @@ public class ModelClass : INotifyPropertyChanged
         {
             if (Equals(value, _selectedClass)) return;
             _selectedClass = value;
+            ReadMethodsFromAssemblyLoaded();
             OnPropertyChanged(nameof(SelectedClass));
+        }
+    }
+
+    public MethodInfo? SelectedMethod
+    {
+        get => _selectedMethod;
+        set
+        {
+            if (Equals(value, _selectedMethod)) return;
+            _selectedMethod = value;
+            OnPropertyChanged(nameof(SelectedMethod));
         }
     }
 
@@ -70,7 +102,36 @@ public class ModelClass : INotifyPropertyChanged
 
     private void ReadClassesFromAssemblyLoaded()
     {
-        Classes = AssemblyLoaded.GetTypes().ToList();
+        Type[] classesTemp = AssemblyLoaded.GetTypes();
+        foreach (var c in classesTemp)
+        {
+            if (c.IsInterface || c.IsAbstract)
+            {
+                continue;
+            }
+            Classes.Add(c);
+        }
+        OnPropertyChanged(nameof(Classes));
+    }
+
+    private void ReadMethodsFromAssemblyLoaded()
+    {
+        MethodInfo[] methodsTemp = SelectedClass.GetMethods();
+        foreach (var m in methodsTemp)
+        {
+            if (m.IsConstructor || m.IsAbstract)
+            {
+                continue;
+            }
+
+            Methods.Add(m);
+        }
+        OnPropertyChanged(nameof(Methods));
+    }
+
+    private void ReadMethodParamsFromAssemblyLoaded()
+    {
+        SelectedMethod.GetParameters();
     }
     
     

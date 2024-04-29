@@ -19,6 +19,7 @@ internal class Helicopter : AirCraft
                 CurrentHeightAboveGround -= stepForHeight;
             }
         }
+        Console.WriteLine("Выполнен полёт вниз для вертолёта. Текущая высота: " + CurrentHeightAboveGround);
         return true;
     }
 
@@ -34,6 +35,7 @@ internal class Helicopter : AirCraft
                 CurrentHeightAboveGround += stepForHeight;
             }
         }
+        Console.WriteLine("Выполнен полёт вверх для вертолёта. Текущая высота: " + CurrentHeightAboveGround);
         return true;
     }
 }
