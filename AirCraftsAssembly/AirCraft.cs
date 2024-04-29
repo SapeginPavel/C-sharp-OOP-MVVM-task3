@@ -2,13 +2,13 @@
 
 namespace AirCraftsAssembly;
 
-internal abstract class AirCraft : INotifyPropertyChanged
+public abstract class AirCraft : INotifyPropertyChanged
 {
     protected int maxHeightAboveGround; //максимальная высота, куда взлетаем
     protected int currentHeightAboveGround; //текущая высота
     protected int stepForHeight; //пока не нужен (шаг для набора высоты)
 
-    protected AirCraft(int maxHeightAboveGround, int stepForHeight)
+    public AirCraft(int maxHeightAboveGround, int stepForHeight)
     {
         this.maxHeightAboveGround = maxHeightAboveGround;
         this.stepForHeight = stepForHeight;

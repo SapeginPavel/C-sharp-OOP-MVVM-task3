@@ -1,6 +1,6 @@
 ﻿namespace AirCraftsAssembly;
 
-internal class Airplane : AirCraft
+public class Airplane : AirCraft
     {
         private int requiredRunwayLength;
         private int currentRunwayLength;

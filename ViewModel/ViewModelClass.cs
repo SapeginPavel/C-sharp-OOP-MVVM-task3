@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Windows;
 using Microsoft.Win32;
 using Task3_1.Model;
 
@@ -16,8 +15,14 @@ class ViewModelClass : INotifyPropertyChanged
     private ObservableCollection<MethodInfo> _methods;
     private MethodInfo? _selectedMethod;
     
-    private ObservableCollection<ConstructorInfo> _constructors;
+    private ObservableCollection<string> _constructors;
+    // private ObservableCollection<ConstructorInfo> _constructors;
     private ConstructorInfo? _selectedConstructor;
+    
+    private ObservableCollection<ParameterInfo> _paramsMethod;
+    private ObservableCollection<ParameterInfo> _paramsConstructor;
+
+    private Dictionary<string, ConstructorInfo> mapStringConstructorInfos;
 
     private ModelClass _modelClass;
 
@@ -27,7 +32,13 @@ class ViewModelClass : INotifyPropertyChanged
         _modelClass = modelClass;
         Classes = new ObservableCollection<Type>();
         Methods = new ObservableCollection<MethodInfo>();
-        Constructors = new ObservableCollection<ConstructorInfo>();
+        // Constructors = new ObservableCollection<ConstructorInfo>();
+        Constructors = new ObservableCollection<string>();
+        ParamsMethod = new ObservableCollection<ParameterInfo>();
+        ParamsConstructor = new ObservableCollection<ParameterInfo>();
+
+        mapStringConstructorInfos = new Dictionary<string, ConstructorInfo>();
+        
         modelClass.PropertyChanged += (sender, e) =>
         {
             if (e.PropertyName == nameof(modelClass.Classes))
@@ -45,11 +56,44 @@ class ViewModelClass : INotifyPropertyChanged
                     Methods.Add(methodInfo);
                 }
             } else if (e.PropertyName == nameof(modelClass.Constructors))
-            {
+            {/////////////////////////////////////////////////////////////////////////////
                 Constructors.Clear();
-                foreach (ConstructorInfo constructorInfo in modelClass.Constructors)
+                mapStringConstructorInfos.Clear();
+                string name = "";
+                foreach (var constructor in modelClass.Constructors)
                 {
-                    Constructors.Add(constructorInfo);
+                    ParameterInfo[] cParams = constructor.GetParameters();
+                    name = constructor.ToString();
+                    foreach (var par in cParams)
+                    {
+                        name += " " + par;
+                    }
+                    Constructors.Add(name);
+                    Console.WriteLine("Вот что: " + name);
+                    mapStringConstructorInfos.Add(name, constructor);
+                }
+                
+                // Constructors.Clear();
+                // foreach (ConstructorInfo constructorInfo in modelClass.Constructors)
+                // {
+                //     Constructors.Add(constructorInfo);
+                // }
+                // Console.WriteLine("Создали");
+                // OnPropertyChanged(nameof(Constructors));
+                // Console.WriteLine("Активировали");
+            } else if (e.PropertyName == nameof(modelClass.ParamsMethod))
+            {
+                ParamsMethod.Clear();
+                foreach (ParameterInfo parameterInfo in modelClass.ParamsMethod)
+                {
+                    ParamsMethod.Add(parameterInfo);
+                }
+            } else if (e.PropertyName == nameof(modelClass.ParamsConstructor))
+            {
+                ParamsMethod.Clear();
+                foreach (ParameterInfo parameterInfo in modelClass.ParamsConstructor)
+                {
+                    ParamsConstructor.Add(parameterInfo);
                 }
             }
         };
@@ -70,10 +114,34 @@ class ViewModelClass : INotifyPropertyChanged
         set => _methods = value ?? throw new ArgumentNullException(nameof(value));
     }
 
-    public ObservableCollection<ConstructorInfo> Constructors
+    // public ObservableCollection<ConstructorInfo> Constructors
+    // {
+    //     get => _constructors;
+    //     set => _constructors = value ?? throw new ArgumentNullException(nameof(value));
+    // }
+
+    public ObservableCollection<string> Constructors
     {
         get => _constructors;
         set => _constructors = value ?? throw new ArgumentNullException(nameof(value));
+    }
+
+    public Dictionary<string, ConstructorInfo> MapStringConstructorInfos
+    {
+        get => mapStringConstructorInfos;
+        set => mapStringConstructorInfos = value ?? throw new ArgumentNullException(nameof(value));
+    }
+
+    public ObservableCollection<ParameterInfo> ParamsMethod
+    {
+        get => _paramsMethod;
+        set => _paramsMethod = value ?? throw new ArgumentNullException(nameof(value));
+    }
+
+    public ObservableCollection<ParameterInfo> ParamsConstructor
+    {
+        get => _paramsConstructor;
+        set => _paramsConstructor = value ?? throw new ArgumentNullException(nameof(value));
     }
 
     public Type? SelectedClass

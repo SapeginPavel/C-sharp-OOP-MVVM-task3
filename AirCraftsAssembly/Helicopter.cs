@@ -1,6 +1,6 @@
 ﻿namespace AirCraftsAssembly;
 
-internal class Helicopter : AirCraft
+public class Helicopter : AirCraft
 {
     public Helicopter(int maxHeightAboveGround, int stepForHeight) : base(maxHeightAboveGround, stepForHeight)
     {

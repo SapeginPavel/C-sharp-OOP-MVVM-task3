@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Windows;
 
 namespace Task3_1.Model;
 
@@ -18,16 +19,16 @@ public class ModelClass : INotifyPropertyChanged
     public List<ConstructorInfo> Constructors { get; }
     private ConstructorInfo? _selectedConstructor;
     
-    private List<Type> _paramsMethod;
-    private List<Type> _paramsConctructor;
+    private List<ParameterInfo> _paramsMethod;
+    private List<ParameterInfo> _paramsConstructor;
 
     public ModelClass()
     {
         _classes = new List<Type>();
         _methods = new List<MethodInfo>();
         Constructors = new List<ConstructorInfo>();
-        _paramsMethod = new List<Type>();
-        _paramsConctructor = new List<Type>();
+        ParamsMethod = new List<ParameterInfo>();
+        ParamsConstructor = new List<ParameterInfo>();
     }
 
     public string? PathToAssembly
@@ -76,6 +77,28 @@ public class ModelClass : INotifyPropertyChanged
         }
     }
 
+    public List<ParameterInfo> ParamsMethod
+    {
+        get => _paramsMethod;
+        set
+        {
+            if (Equals(value, _paramsMethod)) return;
+            _paramsMethod = value ?? throw new ArgumentNullException(nameof(value));
+            OnPropertyChanged();
+        }
+    }
+
+    public List<ParameterInfo> ParamsConstructor
+    {
+        get => _paramsConstructor;
+        set
+        {
+            if (Equals(value, _paramsConstructor)) return;
+            _paramsConstructor = value ?? throw new ArgumentNullException(nameof(value));
+            OnPropertyChanged();
+        }
+    }
+
     public Type? SelectedClass
     {
         get => _selectedClass;
@@ -85,7 +108,6 @@ public class ModelClass : INotifyPropertyChanged
             _selectedClass = value;
             ReadMethodsFromAssemblyLoaded();
             ReadConstructorsFromAssemblyLoaded();
-            // OnPropertyChanged(nameof(SelectedClass));
         }
     }
 
@@ -96,6 +118,7 @@ public class ModelClass : INotifyPropertyChanged
         {
             if (Equals(value, _selectedMethod)) return;
             _selectedMethod = value;
+            ReadMethodParamsFromAssemblyLoaded();
             OnPropertyChanged(nameof(SelectedMethod));
         }
     }
@@ -107,6 +130,7 @@ public class ModelClass : INotifyPropertyChanged
         {
             if (Equals(value, _selectedConstructor)) return;
             _selectedConstructor = value;
+            ReadConstructorParamsFromAssemblyLoaded();
         }
     }
 
@@ -132,8 +156,8 @@ public class ModelClass : INotifyPropertyChanged
 
     private void ReadMethodsFromAssemblyLoaded()
     {
-        MethodInfo[] methodsTemp = SelectedClass.GetMethods();
         Methods.Clear();
+        MethodInfo[] methodsTemp = SelectedClass.GetMethods();
         foreach (var m in methodsTemp)
         {
             if (m.IsConstructor || m.IsAbstract)
@@ -147,18 +171,32 @@ public class ModelClass : INotifyPropertyChanged
     
     private void ReadConstructorsFromAssemblyLoaded()
     {
-        ConstructorInfo[] constructorsTemp = SelectedClass.GetConstructors();
         Constructors.Clear();
+        ConstructorInfo[] constructorsTemp = SelectedClass.GetConstructors();
         foreach (var c in constructorsTemp)
         {
             Constructors.Add(c);
+            Console.WriteLine(c.ToString());
         }
         OnPropertyChanged(nameof(Constructors));
     }
 
     private void ReadMethodParamsFromAssemblyLoaded()
     {
-        SelectedMethod.GetParameters();
+        ParamsMethod.Clear();
+        ParameterInfo[] ps = SelectedMethod.GetParameters();
+        foreach (var parameterInfo in ps)
+        {
+            ParamsMethod.Add(parameterInfo);
+        }
+        OnPropertyChanged(nameof(ParamsMethod));
+    }
+    
+    private void ReadConstructorParamsFromAssemblyLoaded()
+    {
+        ParamsConstructor.Clear();
+        ParamsConstructor = SelectedMethod.GetParameters().ToList();
+        OnPropertyChanged(nameof(ParamsConstructor));
     }
     
     
