@@ -8,7 +8,7 @@
         Title="MainWindow" Height="450" Width="800">
     <Grid Margin="10">
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"></RowDefinition>
+            <!-- <RowDefinition Height="*"></RowDefinition> -->
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
@@ -43,17 +43,7 @@
         </ListBox>
         <Button Grid.Column="0" Grid.Row="1" Command="{Binding OpenFileCommand}" Content="Открыть .dll файл" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5"/>
         
-        <ListBox Grid.Column="1" Grid.Row="1" ItemsSource="{Binding ParamsConstructor}">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Margin="5">
-                        <TextBlock FontSize="14" Text="{Binding Path=Name}" />
-                    </StackPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-        
-        <Grid Grid.Row="2" Grid.Column="1" Margin="10">
+        <Grid Grid.Row="1" Grid.Column="1" Margin="10">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
@@ -78,18 +68,7 @@
             </ListBox.ItemTemplate>
         </ListBox>
         
-        <ListBox Grid.Column="2" Grid.Row="1" ItemsSource="{Binding ParamsMethod}"
-                 SelectedItem="{Binding SelectedAA}">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Margin="5">
-                        <TextBlock FontSize="14" Text="{Binding Path=Name}" />
-                    </StackPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-        
-        <Grid Grid.Row="2" Grid.Column="2" Margin="10">
+        <Grid Grid.Row="1" Grid.Column="2" Margin="10">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
