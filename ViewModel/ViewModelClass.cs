@@ -2,6 +2,8 @@
 using System.ComponentModel;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Text;
+using System.Text.RegularExpressions;
 using Microsoft.Win32;
 using Task3_1.Model;
 
@@ -60,15 +62,23 @@ class ViewModelClass : INotifyPropertyChanged
             {/////////////////////////////////////////////////////////////////////////////
                 Constructors.Clear();
                 mapStringConstructorInfos.Clear();
-                string name = "";
+                StringBuilder sb = new StringBuilder();
+                string pattern = @"\(.*?\)";
                 foreach (var constructor in modelClass.Constructors)
                 {
                     ParameterInfo[] cParams = constructor.GetParameters();
-                    name = constructor.ToString();
-                    foreach (var par in cParams)
+                    sb.Append(Regex.Replace(constructor.ToString(), pattern, ""));
+                    sb.Append("(");
+                    for (int i = 0; i < cParams.Length; i++)
                     {
-                        name += " " + par;
+                        sb.Append(cParams[i]);
+                        if (i != cParams.Length - 1)
+                        {
+                            sb.Append(", ");
+                        }
                     }
+                    sb.Append(")");
+                    string name = sb.ToString();
                     Constructors.Add(name);
                     mapStringConstructorInfos.Add(name, constructor);
                 }
