@@ -179,4 +179,21 @@ class ViewModelClass : INotifyPropertyChanged
         sb.Append(")");
         return sb.ToString();
     }
+
+    private CommandClass _createObjectCommand;
+
+    public CommandClass CreateObjectCommand
+    {
+        get
+        {
+            return (_createObjectCommand = new CommandClass(o =>
+                   {
+                       Console.WriteLine("create");
+                       Console.WriteLine((string) o);
+                       string parametersStr = (string)o;
+                       string[] parameters = parametersStr.Split(",");
+                       _modelClass.ParamsConstructor = parameters.ToList();
+                   }));
+        }
+    }
 }

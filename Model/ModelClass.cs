@@ -12,23 +12,23 @@ public class ModelClass : INotifyPropertyChanged
 
     private List<Type> _classes;
     private Type? _selectedClass;
-
-    private List<MethodInfo> _methods;
-    private MethodInfo? _selectedMethod;
     
     public List<ConstructorInfo> Constructors { get; }
     private ConstructorInfo? _selectedConstructor;
-    
-    private List<ParameterInfo> _paramsMethod;
-    private List<ParameterInfo> _paramsConstructor;
+
+    private List<MethodInfo> _methods;
+    private MethodInfo? _selectedMethod;
+
+    private List<string> _paramsConstructor;
+    private List<string> _paramsMethod;
 
     public ModelClass()
     {
         _classes = new List<Type>();
         _methods = new List<MethodInfo>();
         Constructors = new List<ConstructorInfo>();
-        ParamsMethod = new List<ParameterInfo>();
-        ParamsConstructor = new List<ParameterInfo>();
+        ParamsConstructor = new List<string>();
+        ParamsMethod = new List<string>();
     }
 
     public string? PathToAssembly
@@ -77,7 +77,7 @@ public class ModelClass : INotifyPropertyChanged
         }
     }
 
-    public List<ParameterInfo> ParamsMethod
+    public List<string> ParamsMethod
     {
         get => _paramsMethod;
         set
@@ -88,7 +88,7 @@ public class ModelClass : INotifyPropertyChanged
         }
     }
 
-    public List<ParameterInfo> ParamsConstructor
+    public List<string> ParamsConstructor
     {
         get => _paramsConstructor;
         set
