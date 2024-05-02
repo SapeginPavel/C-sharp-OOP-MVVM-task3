@@ -14,33 +14,25 @@ class ViewModelClass : INotifyPropertyChanged
     private ObservableCollection<Type> _classes;
     private Type? _selectedClass;
 
-    private ObservableCollection<MethodInfo> _methods;
-    private MethodInfo? _selectedMethod;
+    private Dictionary<string, MethodInfo> mapStringMethodInfos;
+    private ObservableCollection<string> _methods;
+    private string _selectedMethod;
     
+    private Dictionary<string, ConstructorInfo> mapStringConstructorInfos;
     private ObservableCollection<string> _constructors;
     private string _selectedConstr;
-    // private ObservableCollection<ConstructorInfo> _constructors;
-    private ConstructorInfo? _selectedConstructor;
-    
-    private ObservableCollection<ParameterInfo> _paramsMethod;
-    private ObservableCollection<ParameterInfo> _paramsConstructor;
-
-    private Dictionary<string, ConstructorInfo> mapStringConstructorInfos;
 
     private ModelClass _modelClass;
-
 
     public ViewModelClass(ModelClass modelClass)
     {
         _modelClass = modelClass;
         Classes = new ObservableCollection<Type>();
-        Methods = new ObservableCollection<MethodInfo>();
-        // Constructors = new ObservableCollection<ConstructorInfo>();
+        Methods = new ObservableCollection<string>();
         Constructors = new ObservableCollection<string>();
-        ParamsMethod = new ObservableCollection<ParameterInfo>();
-        ParamsConstructor = new ObservableCollection<ParameterInfo>();
 
         mapStringConstructorInfos = new Dictionary<string, ConstructorInfo>();
+        mapStringMethodInfos = new Dictionary<string, MethodInfo>();
         
         modelClass.PropertyChanged += (sender, e) =>
         {
@@ -51,50 +43,25 @@ class ViewModelClass : INotifyPropertyChanged
                 {
                     Classes.Add(t);
                 }
-            } else if (e.PropertyName == nameof(modelClass.Methods))
-            {
-                Methods.Clear();
-                foreach (MethodInfo methodInfo in modelClass.Methods)
-                {
-                    Methods.Add(methodInfo);
-                }
             } else if (e.PropertyName == nameof(modelClass.Constructors))
-            {/////////////////////////////////////////////////////////////////////////////
+            {
                 Constructors.Clear();
                 mapStringConstructorInfos.Clear();
-                StringBuilder sb = new StringBuilder();
-                string pattern = @"\(.*?\)";
                 foreach (var constructor in modelClass.Constructors)
                 {
-                    ParameterInfo[] cParams = constructor.GetParameters();
-                    sb.Append(Regex.Replace(constructor.ToString(), pattern, ""));
-                    sb.Append("(");
-                    for (int i = 0; i < cParams.Length; i++)
-                    {
-                        sb.Append(cParams[i]);
-                        if (i != cParams.Length - 1)
-                        {
-                            sb.Append(", ");
-                        }
-                    }
-                    sb.Append(")");
-                    string name = sb.ToString();
+                    string name = createNameForMethod(constructor);
                     Constructors.Add(name);
                     mapStringConstructorInfos.Add(name, constructor);
                 }
-            } else if (e.PropertyName == nameof(modelClass.ParamsMethod))
+            }  else if (e.PropertyName == nameof(modelClass.Methods))
             {
-                ParamsMethod.Clear();
-                foreach (ParameterInfo parameterInfo in modelClass.ParamsMethod)
+                Methods.Clear();
+                mapStringMethodInfos.Clear();
+                foreach (var method in modelClass.Methods)
                 {
-                    ParamsMethod.Add(parameterInfo);
-                }
-            } else if (e.PropertyName == nameof(modelClass.ParamsConstructor))
-            {
-                ParamsMethod.Clear();
-                foreach (ParameterInfo parameterInfo in modelClass.ParamsConstructor)
-                {
-                    ParamsConstructor.Add(parameterInfo);
+                    string name = createNameForMethod(method);
+                    Methods.Add(name);
+                    mapStringMethodInfos.Add(name, method);
                 }
             }
         };
@@ -109,22 +76,16 @@ class ViewModelClass : INotifyPropertyChanged
         }
     }
 
-    public ObservableCollection<MethodInfo> Methods
-    {
-        get => _methods;
-        set => _methods = value ?? throw new ArgumentNullException(nameof(value));
-    }
-
-    // public ObservableCollection<ConstructorInfo> Constructors
-    // {
-    //     get => _constructors;
-    //     set => _constructors = value ?? throw new ArgumentNullException(nameof(value));
-    // }
-
     public ObservableCollection<string> Constructors
     {
         get => _constructors;
         set => _constructors = value ?? throw new ArgumentNullException(nameof(value));
+    }
+
+    public ObservableCollection<string> Methods
+    {
+        get => _methods;
+        set => _methods = value ?? throw new ArgumentNullException(nameof(value));
     }
 
     public Dictionary<string, ConstructorInfo> MapStringConstructorInfos
@@ -132,19 +93,7 @@ class ViewModelClass : INotifyPropertyChanged
         get => mapStringConstructorInfos;
         set => mapStringConstructorInfos = value ?? throw new ArgumentNullException(nameof(value));
     }
-
-    public ObservableCollection<ParameterInfo> ParamsMethod
-    {
-        get => _paramsMethod;
-        set => _paramsMethod = value ?? throw new ArgumentNullException(nameof(value));
-    }
-
-    public ObservableCollection<ParameterInfo> ParamsConstructor
-    {
-        get => _paramsConstructor;
-        set => _paramsConstructor = value ?? throw new ArgumentNullException(nameof(value));
-    }
-
+    
     public Type? SelectedClass
     {
         get => _selectedClass;
@@ -155,35 +104,23 @@ class ViewModelClass : INotifyPropertyChanged
         }
     }
 
-    public MethodInfo? SelectedMethod
-    {
-        get => _selectedMethod;
-        set
-        {
-            _modelClass.SelectedMethod = value;
-            _selectedMethod = value;
-        }
-    }
-
-    public ConstructorInfo? SelectedConstructor
-    {
-        get => _selectedConstructor;
-        set
-        {
-            _modelClass.SelectedConstructor = value;
-            _selectedConstructor = value;
-        }
-    }
-
     public string SelectedConstr
     {
         get => _selectedConstr;
         set
         {
-            Console.WriteLine("Меняем конструктор");
             _selectedConstr = value;
-            Console.WriteLine("на " + mapStringConstructorInfos[_selectedConstr]);
-            _modelClass.SelectedConstructor = mapStringConstructorInfos[_selectedConstr];
+            _modelClass.SelectedConstructor = mapStringConstructorInfos[value];
+        }
+    }
+
+    public string SelectedMethod
+    {
+        get => _selectedMethod;
+        set
+        {
+            _selectedMethod = value;
+            _modelClass.SelectedMethod = mapStringMethodInfos[value];
         }
     }
 
@@ -221,5 +158,25 @@ class ViewModelClass : INotifyPropertyChanged
             _modelClass.PathToAssembly = selectedFilePath;
             
         }
+    }
+
+    private string createNameForMethod(MethodBase method)
+    {
+        StringBuilder sb = new StringBuilder();
+        string pattern = @"\(.*?\)";
+        
+        ParameterInfo[] cParams = method.GetParameters();
+        sb.Append(Regex.Replace(method.ToString(), pattern, ""));
+        sb.Append("(");
+        for (int i = 0; i < cParams.Length; i++)
+        {
+            sb.Append(cParams[i]);
+            if (i != cParams.Length - 1)
+            {
+                sb.Append(", ");
+            }
+        }
+        sb.Append(")");
+        return sb.ToString();
     }
 }

@@ -118,7 +118,6 @@ public class ModelClass : INotifyPropertyChanged
         {
             if (Equals(value, _selectedMethod)) return;
             _selectedMethod = value;
-            ReadMethodParamsFromAssemblyLoaded();
             OnPropertyChanged(nameof(SelectedMethod));
         }
     }
@@ -130,9 +129,6 @@ public class ModelClass : INotifyPropertyChanged
         {
             if (Equals(value, _selectedConstructor)) return;
             _selectedConstructor = value;
-            Console.WriteLine("Установили Конструктор");
-            MessageBox.Show("Конструктор: " + _selectedConstructor);
-            // ReadConstructorParamsFromAssemblyLoaded();
         }
     }
 
@@ -183,25 +179,6 @@ public class ModelClass : INotifyPropertyChanged
         OnPropertyChanged(nameof(Constructors));
     }
 
-    private void ReadMethodParamsFromAssemblyLoaded()
-    {
-        ParamsMethod.Clear();
-        ParameterInfo[] ps = SelectedMethod.GetParameters();
-        foreach (var parameterInfo in ps)
-        {
-            ParamsMethod.Add(parameterInfo);
-        }
-        OnPropertyChanged(nameof(ParamsMethod));
-    }
-    
-    private void ReadConstructorParamsFromAssemblyLoaded()
-    {
-        ParamsConstructor.Clear();
-        ParamsConstructor = SelectedMethod.GetParameters().ToList();
-        OnPropertyChanged(nameof(ParamsConstructor));
-    }
-    
-    
     
     public event PropertyChangedEventHandler? PropertyChanged;
 
