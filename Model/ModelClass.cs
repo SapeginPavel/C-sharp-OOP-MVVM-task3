@@ -130,7 +130,9 @@ public class ModelClass : INotifyPropertyChanged
         {
             if (Equals(value, _selectedConstructor)) return;
             _selectedConstructor = value;
-            ReadConstructorParamsFromAssemblyLoaded();
+            Console.WriteLine("Установили Конструктор");
+            MessageBox.Show("Конструктор: " + _selectedConstructor);
+            // ReadConstructorParamsFromAssemblyLoaded();
         }
     }
 

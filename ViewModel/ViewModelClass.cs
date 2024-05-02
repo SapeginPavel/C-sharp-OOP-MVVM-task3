@@ -9,13 +9,14 @@ namespace Task3_1.ViewModel;
 
 class ViewModelClass : INotifyPropertyChanged
 {
-    private ObservableCollection<Type> _classes; //todo: упростить (сразу свойства сделать)
+    private ObservableCollection<Type> _classes;
     private Type? _selectedClass;
 
     private ObservableCollection<MethodInfo> _methods;
     private MethodInfo? _selectedMethod;
     
     private ObservableCollection<string> _constructors;
+    private string _selectedConstr;
     // private ObservableCollection<ConstructorInfo> _constructors;
     private ConstructorInfo? _selectedConstructor;
     
@@ -69,18 +70,8 @@ class ViewModelClass : INotifyPropertyChanged
                         name += " " + par;
                     }
                     Constructors.Add(name);
-                    Console.WriteLine("Вот что: " + name);
                     mapStringConstructorInfos.Add(name, constructor);
                 }
-                
-                // Constructors.Clear();
-                // foreach (ConstructorInfo constructorInfo in modelClass.Constructors)
-                // {
-                //     Constructors.Add(constructorInfo);
-                // }
-                // Console.WriteLine("Создали");
-                // OnPropertyChanged(nameof(Constructors));
-                // Console.WriteLine("Активировали");
             } else if (e.PropertyName == nameof(modelClass.ParamsMethod))
             {
                 ParamsMethod.Clear();
@@ -171,6 +162,18 @@ class ViewModelClass : INotifyPropertyChanged
         {
             _modelClass.SelectedConstructor = value;
             _selectedConstructor = value;
+        }
+    }
+
+    public string SelectedConstr
+    {
+        get => _selectedConstr;
+        set
+        {
+            Console.WriteLine("Меняем конструктор");
+            _selectedConstr = value;
+            Console.WriteLine("на " + mapStringConstructorInfos[_selectedConstr]);
+            _modelClass.SelectedConstructor = mapStringConstructorInfos[_selectedConstr];
         }
     }
 

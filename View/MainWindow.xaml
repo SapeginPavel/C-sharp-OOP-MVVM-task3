@@ -30,8 +30,9 @@
             </ListBox.ItemTemplate>
         </ListBox>
 
+        <!-- Конструкторы -->
         <ListBox Grid.Column="1" Grid.Row="0" ItemsSource="{Binding Constructors}"
-                 SelectedItem="{Binding SelectedConstructorr}">
+                 SelectedItem="{Binding SelectedConstr}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Margin="5">
@@ -41,9 +42,7 @@
             </ListBox.ItemTemplate>
         </ListBox>
         <Button Grid.Column="0" Grid.Row="1" Command="{Binding OpenFileCommand}" Content="Открыть .dll файл" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5"/>
-
-        <!-- Конструкторы -->
-
+        
         <ListBox Grid.Column="1" Grid.Row="1" ItemsSource="{Binding ParamsConstructor}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
