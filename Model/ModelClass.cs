@@ -22,6 +22,8 @@ public class ModelClass : INotifyPropertyChanged
     private List<string> _paramsConstructor;
     private List<string> _paramsMethod;
 
+    private object createdObject;
+
     public ModelClass()
     {
         _classes = new List<Type>();
@@ -83,7 +85,7 @@ public class ModelClass : INotifyPropertyChanged
         set
         {
             if (Equals(value, _paramsMethod)) return;
-            _paramsMethod = value ?? throw new ArgumentNullException(nameof(value));
+            _paramsMethod = value;
             OnPropertyChanged();
         }
     }
@@ -94,9 +96,25 @@ public class ModelClass : INotifyPropertyChanged
         set
         {
             if (Equals(value, _paramsConstructor)) return;
-            _paramsConstructor = value ?? throw new ArgumentNullException(nameof(value));
+            _paramsConstructor = value;
+            createObject();
             OnPropertyChanged();
         }
+    }
+
+    private void createObject()
+    {
+        if (SelectedConstructor == null)
+        {
+            return;
+        }
+        ParameterInfo[] constructorParams = SelectedConstructor.GetParameters();
+        object[] paramsForConstructor = new object[constructorParams.Length];
+        for (int i = 0; i < constructorParams.Length; i++)
+        {
+            paramsForConstructor[i] = Convert.ChangeType(ParamsConstructor[i], constructorParams[i].ParameterType);
+        }
+        createdObject = SelectedConstructor.Invoke(paramsForConstructor);
     }
 
     public Type? SelectedClass

@@ -189,11 +189,16 @@ class ViewModelClass : INotifyPropertyChanged
             return (_createObjectCommand = new CommandClass(o =>
                    {
                        Console.WriteLine("create");
-                       Console.WriteLine((string) o);
-                       string parametersStr = (string)o;
-                       string[] parameters = parametersStr.Split(",");
-                       _modelClass.ParamsConstructor = parameters.ToList();
+                       // Console.WriteLine((string) o);
+                       
+                       _modelClass.ParamsConstructor = getArgsFromTextBox(o).ToList();
                    }));
         }
+    }
+
+    private string[] getArgsFromTextBox(object o)
+    {
+        string parametersStr = (string)o;
+        return parametersStr.Split(",");
     }
 }
