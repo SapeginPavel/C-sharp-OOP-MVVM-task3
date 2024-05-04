@@ -77,8 +77,8 @@
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             
-            <TextBox Grid.Column="0" Grid.Row="0" Margin="5"></TextBox>
-            <Button Grid.Column="1" Grid.Row="0" Content="Выполнить" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5"/>
+            <TextBox Name="MethodExecutorTextBox" Grid.Column="0" Grid.Row="0" Margin="5"></TextBox>
+            <Button Command="{Binding ExecuteMethodCommand}" CommandParameter="{Binding Text, ElementName=MethodExecutorTextBox}" Grid.Column="1" Grid.Row="0" Content="Выполнить" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5"/>
         </Grid>
 
     </Grid>

@@ -63,6 +63,9 @@ class ViewModelClass : INotifyPropertyChanged
                     Methods.Add(name);
                     mapStringMethodInfos.Add(name, method);
                 }
+            } else if (e.PropertyName == nameof(modelClass.SelectedConstructor))
+            {
+                _selectedConstr = "";
             }
         };
     }
@@ -181,7 +184,6 @@ class ViewModelClass : INotifyPropertyChanged
     }
 
     private CommandClass _createObjectCommand;
-
     public CommandClass CreateObjectCommand
     {
         get
@@ -193,6 +195,19 @@ class ViewModelClass : INotifyPropertyChanged
                        
                        _modelClass.ParamsConstructor = getArgsFromTextBox(o).ToList();
                    }));
+        }
+    }
+    
+    private CommandClass _executeMethodCommand;
+    public CommandClass ExecuteMethodCommand
+    {
+        get
+        {
+            return (_executeMethodCommand = new CommandClass(o =>
+            {
+                Console.WriteLine("execute");
+                _modelClass.ParamsMethod = getArgsFromTextBox(o).ToList();
+            }));
         }
     }
 

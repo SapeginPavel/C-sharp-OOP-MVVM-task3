@@ -84,10 +84,20 @@ public class ModelClass : INotifyPropertyChanged
         get => _paramsMethod;
         set
         {
-            if (Equals(value, _paramsMethod)) return;
             _paramsMethod = value;
-            OnPropertyChanged();
+            ExecuteMethod();
         }
+    }
+
+    private void ExecuteMethod()
+    {
+        if (SelectedMethod == null)
+        {
+            return;
+        }
+        object[] paramsForMethod = GetObjectArrOfArgsForMethod(SelectedMethod, ParamsMethod);
+        SelectedMethod.Invoke(createdObject, paramsForMethod);
+        Console.WriteLine("executed " + SelectedMethod);
     }
 
     public List<string> ParamsConstructor
@@ -95,26 +105,32 @@ public class ModelClass : INotifyPropertyChanged
         get => _paramsConstructor;
         set
         {
-            if (Equals(value, _paramsConstructor)) return;
             _paramsConstructor = value;
-            createObject();
-            OnPropertyChanged();
+            CreateObject();
         }
     }
 
-    private void createObject()
+    private void CreateObject()
     {
         if (SelectedConstructor == null)
         {
             return;
         }
-        ParameterInfo[] constructorParams = SelectedConstructor.GetParameters();
-        object[] paramsForConstructor = new object[constructorParams.Length];
-        for (int i = 0; i < constructorParams.Length; i++)
-        {
-            paramsForConstructor[i] = Convert.ChangeType(ParamsConstructor[i], constructorParams[i].ParameterType);
-        }
+
+        object[] paramsForConstructor = GetObjectArrOfArgsForMethod(SelectedConstructor, ParamsConstructor);
         createdObject = SelectedConstructor.Invoke(paramsForConstructor);
+        Console.WriteLine("created " + createdObject);
+    }
+
+    private object[] GetObjectArrOfArgsForMethod(MethodBase method, List<string> args)
+    {
+        ParameterInfo[] methodParams = method.GetParameters();
+        object[] paramsForConstructor = new object[methodParams.Length];
+        for (int i = 0; i < methodParams.Length; i++)
+        {
+            paramsForConstructor[i] = Convert.ChangeType(args[i], methodParams[i].ParameterType);
+        }
+        return paramsForConstructor;
     }
 
     public Type? SelectedClass
@@ -124,6 +140,7 @@ public class ModelClass : INotifyPropertyChanged
         {
             if (Equals(value, _selectedClass)) return;
             _selectedClass = value;
+            SelectedConstructor = null;
             ReadMethodsFromAssemblyLoaded();
             ReadConstructorsFromAssemblyLoaded();
         }
@@ -147,6 +164,7 @@ public class ModelClass : INotifyPropertyChanged
         {
             if (Equals(value, _selectedConstructor)) return;
             _selectedConstructor = value;
+            OnPropertyChanged(nameof(SelectedConstructor));
         }
     }
 
