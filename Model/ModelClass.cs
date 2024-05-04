@@ -88,7 +88,7 @@ public class ModelClass : INotifyPropertyChanged
 
     private void ExecuteMethod()
     {
-        if (SelectedMethod == null)
+        if (SelectedMethod == null || createdObject == null)
         {
             return;
         }
