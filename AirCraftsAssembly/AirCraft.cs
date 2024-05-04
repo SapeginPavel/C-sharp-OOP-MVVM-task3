@@ -6,14 +6,7 @@ public abstract class AirCraft : INotifyPropertyChanged
 {
     protected int maxHeightAboveGround; //максимальная высота, куда взлетаем
     protected int currentHeightAboveGround; //текущая высота
-    protected int stepForHeight; //пока не нужен (шаг для набора высоты)
-
-    public AirCraft(int maxHeightAboveGround, int stepForHeight)
-    {
-        this.maxHeightAboveGround = maxHeightAboveGround;
-        this.stepForHeight = stepForHeight;
-        currentHeightAboveGround = 0;
-    }
+    // protected int stepForHeight; //пока не нужен (шаг для набора высоты)
 
     protected AirCraft(int maxHeightAboveGround)
     {
@@ -30,8 +23,8 @@ public abstract class AirCraft : INotifyPropertyChanged
         } 
     }
 
-    public abstract bool Up();
-    public abstract bool Down();
+    public abstract bool Up(int step);
+    public abstract bool Down(int step);
 
 
     public event PropertyChangedEventHandler? PropertyChanged;

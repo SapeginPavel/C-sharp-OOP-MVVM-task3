@@ -5,7 +5,7 @@ public class Airplane : AirCraft
         private int requiredRunwayLength;
         private int currentRunwayLength;
 
-        public Airplane(int maxHeightAboveGround, int stepForHeight, int requiredRunwayLength) : base(maxHeightAboveGround, stepForHeight)
+        public Airplane(int maxHeightAboveGround, int requiredRunwayLength) : base(maxHeightAboveGround)
         {
             this.requiredRunwayLength = requiredRunwayLength;
         }
@@ -21,9 +21,10 @@ public class Airplane : AirCraft
                 currentRunwayLength = value;
             }
         }
-        public override bool Down()
+        public override bool Down(int step)
         {
-            if ((CurrentHeightAboveGround == 0 || CurrentHeightAboveGround - stepForHeight <= 0) && CurrentRunwayLength < requiredRunwayLength)
+            if ((CurrentHeightAboveGround == 0 || CurrentHeightAboveGround - step <= 0) && CurrentRunwayLength < requiredRunwayLength)
+                
             {
                 Console.WriteLine("Нельзя выполнить полёт вниз для самолёта. Текущая высота: " + CurrentHeightAboveGround);
                 return false;
@@ -32,9 +33,9 @@ public class Airplane : AirCraft
             {
                 if (CurrentHeightAboveGround > 0)
                 {
-                    if (CurrentHeightAboveGround - stepForHeight > 0)
+                    if (CurrentHeightAboveGround - step > 0)
                     {
-                        CurrentHeightAboveGround -= stepForHeight;
+                        CurrentHeightAboveGround -= step;
                     }
                     else
                     {
@@ -46,7 +47,7 @@ public class Airplane : AirCraft
             }
         }
 
-        public override bool Up()
+        public override bool Up(int step)
         {
             if (CurrentHeightAboveGround == 0 && CurrentRunwayLength < requiredRunwayLength)
             {
@@ -57,12 +58,12 @@ public class Airplane : AirCraft
             {
                 if (CurrentHeightAboveGround < maxHeightAboveGround)
                 {
-                    if (CurrentHeightAboveGround + stepForHeight > requiredRunwayLength)
+                    if (CurrentHeightAboveGround + step > requiredRunwayLength)
                     {
                         CurrentHeightAboveGround = maxHeightAboveGround;
                     } else
                     {
-                        CurrentHeightAboveGround += stepForHeight;
+                        CurrentHeightAboveGround += step;
                     }
                 }
                 Console.WriteLine("Выполнен полёт вверх для самолёта. Текущая высота: " + CurrentHeightAboveGround);
