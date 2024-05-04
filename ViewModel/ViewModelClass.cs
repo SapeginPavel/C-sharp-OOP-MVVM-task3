@@ -65,7 +65,10 @@ class ViewModelClass : INotifyPropertyChanged
                 }
             } else if (e.PropertyName == nameof(modelClass.SelectedConstructor))
             {
-                _selectedConstr = "";
+                SelectedConstr = "";
+            } else if (e.PropertyName == nameof(modelClass.SelectedMethod))
+            {
+                SelectedMethod = "";
             }
         };
     }
@@ -113,6 +116,7 @@ class ViewModelClass : INotifyPropertyChanged
         set
         {
             _selectedConstr = value;
+            if (Equals(value, "")) return;
             _modelClass.SelectedConstructor = mapStringConstructorInfos[value];
         }
     }
@@ -123,6 +127,7 @@ class ViewModelClass : INotifyPropertyChanged
         set
         {
             _selectedMethod = value;
+            if (Equals(value, "")) return;
             _modelClass.SelectedMethod = mapStringMethodInfos[value];
         }
     }

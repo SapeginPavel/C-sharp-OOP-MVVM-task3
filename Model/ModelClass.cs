@@ -141,6 +141,7 @@ public class ModelClass : INotifyPropertyChanged
             if (Equals(value, _selectedClass)) return;
             _selectedClass = value;
             SelectedConstructor = null;
+            SelectedMethod = null;
             ReadMethodsFromAssemblyLoaded();
             ReadConstructorsFromAssemblyLoaded();
         }
