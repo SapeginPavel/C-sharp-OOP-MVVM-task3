@@ -1,7 +1,5 @@
 ﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using Microsoft.Win32;
@@ -9,7 +7,7 @@ using Task3_1.Model;
 
 namespace Task3_1.ViewModel;
 
-class ViewModelClass : INotifyPropertyChanged
+class ViewModelClass
 {
     private ObservableCollection<Type> _classes;
     private Type? _selectedClass;
@@ -131,14 +129,6 @@ class ViewModelClass : INotifyPropertyChanged
             _modelClass.SelectedMethod = mapStringMethodInfos[value];
         }
     }
-
-
-    public event PropertyChangedEventHandler? PropertyChanged;
-
-    protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
     
     private CommandClass openFileCommand;
     public CommandClass OpenFileCommand
@@ -196,8 +186,6 @@ class ViewModelClass : INotifyPropertyChanged
             return (_createObjectCommand = new CommandClass(o =>
                    {
                        Console.WriteLine("create");
-                       // Console.WriteLine((string) o);
-                       
                        _modelClass.ParamsConstructor = getArgsFromTextBox(o).ToList();
                    }));
         }

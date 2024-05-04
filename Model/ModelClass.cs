@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Windows;
 
 namespace Task3_1.Model;
 
@@ -40,9 +39,8 @@ public class ModelClass : INotifyPropertyChanged
         {
             if (value == _pathToAssembly) return;
             _pathToAssembly = value;
-            UpdateAssemblyLoaded();
+            AssemblyLoaded = Assembly.LoadFrom(PathToAssembly);
             ReadClassesFromAssemblyLoaded();
-            OnPropertyChanged(nameof(PathToAssembly));
         }
     }
 
@@ -53,7 +51,6 @@ public class ModelClass : INotifyPropertyChanged
         {
             if (Equals(value, _assemblyLoaded)) return;
             _assemblyLoaded = value;
-            OnPropertyChanged(nameof(AssemblyLoaded));
         }
     }
 
@@ -109,14 +106,13 @@ public class ModelClass : INotifyPropertyChanged
             CreateObject();
         }
     }
-
+    
     private void CreateObject()
     {
         if (SelectedConstructor == null)
         {
             return;
         }
-
         object[] paramsForConstructor = GetObjectArrOfArgsForMethod(SelectedConstructor, ParamsConstructor);
         createdObject = SelectedConstructor.Invoke(paramsForConstructor);
         Console.WriteLine("created " + createdObject);
@@ -168,12 +164,6 @@ public class ModelClass : INotifyPropertyChanged
             OnPropertyChanged(nameof(SelectedConstructor));
         }
     }
-
-    private void UpdateAssemblyLoaded()
-    {
-        AssemblyLoaded = Assembly.LoadFrom(PathToAssembly);
-    }
-
     private void ReadClassesFromAssemblyLoaded()
     {
         Classes.Clear();
